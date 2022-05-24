@@ -1,18 +1,15 @@
 import React, { Component } from 'react';
-// import { Switch, Route } from 'react-router-dom';
-import './App.css';
-import logo from './trivia.png';
+import { Route, Switch } from 'react-router-dom';
+import Login from './pages/Login';
+import Game from './pages/Game';
 
-// apenas para o push
 export default class App extends Component {
   render() {
     return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>SUA VEZ</p>
-        </header>
-      </div>
-    )
+      <Switch>
+        <Route path="/" exact component={ Login } />
+        <Route path="/game" exact component={ Game } />
+      </Switch>
+    );
   }
 }
