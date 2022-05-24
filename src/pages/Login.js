@@ -42,6 +42,12 @@ loginHandle = (event) => {
   history.push('/game');
 }
 
+loginSettings = (event) => {
+  event.preventDefault();
+  const { history } = this.props;
+  history.push('/settings');
+}
+
 render() {
   const { email, playerName, isButtonDisabled } = this.state;
   return (
@@ -75,6 +81,14 @@ render() {
           onClick={ this.loginHandle }
         >
           Play
+
+        </button>
+        <button
+          data-testid="btn-settings"
+          type="submit"
+          onClick={ this.loginSettings }
+        >
+          Settings
 
         </button>
       </form>
