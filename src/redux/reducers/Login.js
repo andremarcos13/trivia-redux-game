@@ -1,16 +1,18 @@
 import { SAVE_EMAIL, TOKEN_SAVER } from '../actions/loginAction';
 
-const initialState = {
+const State = {
   token: '',
+  returnToken: {},
   gravatar: {},
 };
 
-export default (state = initialState, { type, payload, gravatar, profileName }) => {
+const login = (state = State, { type, payload, gravatar, profileName, returnToken }) => {
   switch (type) {
   case TOKEN_SAVER:
     return {
       ...state,
       token: payload,
+      returnToken,
     };
 
   case SAVE_EMAIL:
@@ -24,3 +26,5 @@ export default (state = initialState, { type, payload, gravatar, profileName }) 
     return state;
   }
 };
+
+export default login;

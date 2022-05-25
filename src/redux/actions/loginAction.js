@@ -6,7 +6,8 @@ export const SAVE_EMAIL = 'SAVE_EMAIL';
 
 export const tokenSaver = (token) => ({
   type: TOKEN_SAVER,
-  payload: token,
+  payload: token.token,
+  returnToken: token,
 });
 
 export const gravatarAct = (resultado, name) => ({
@@ -20,7 +21,7 @@ export const loginAction = () => async (dispatch) => {
     const response = await fetch('https://opentdb.com/api_token.php?command=request');
     const result = await response.json();
     localStorage.setItem('token', result.token);
-    dispatch(tokenSaver(result.token));
+    dispatch(tokenSaver(result));
   } catch (error) {
     console.log(error);
   }
