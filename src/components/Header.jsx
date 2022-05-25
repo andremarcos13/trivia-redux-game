@@ -24,7 +24,10 @@ class Header extends Component {
 }
 
 Header.propTypes = {
-  login: PropTypes.string.isRequired,
+  login: PropTypes.shape({
+    gravatar: PropTypes.string,
+    profileName: PropTypes.string,
+  }).isRequired,
 };
 
 const mapStateToProps = (state) => ({
