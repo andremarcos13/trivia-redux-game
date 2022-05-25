@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { loginAction } from '../redux/actions/loginAction';
+import { gravatarThunk, loginAction } from '../redux/actions/loginAction';
 
 class Login extends Component {
   constructor() {
@@ -36,9 +36,10 @@ class Login extends Component {
 
 loginHandle = (event) => {
   event.preventDefault();
-  const { history, login } = this.props;
-  const { email } = this.state;
-  login(email);
+  const { history, dispatch } = this.props;
+  const { email, playerName } = this.state;
+  dispatch(gravatarThunk(email, playerName));
+  dispatch(loginAction());
   history.push('/game');
 }
 
@@ -97,19 +98,15 @@ render() {
 }
 }
 
-const mapDispatchToProps = (dispatch) => ({
-  login: (email) => dispatch(loginAction(email)),
-});
-
 Login.propTypes = {
   history: PropTypes.shape({
     push: PropTypes.func.isRequired,
   }),
-  login: PropTypes.func.isRequired,
+  dispatch: PropTypes.func.isRequired,
 };
 
 Login.defaultProps = {
   history: null,
 };
 
-export default connect(null, mapDispatchToProps)(Login);
+export default connect()(Login);

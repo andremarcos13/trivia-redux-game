@@ -1,5 +1,6 @@
 // import PropTypes from 'prop-types'
 import React, { Component } from 'react';
+import Header from '../components/Header';
 // import { connect } from 'react-redux';
 
 export default class Game extends Component {
@@ -9,7 +10,12 @@ export default class Game extends Component {
 
   render() {
     return (
-      <div>Game</div>
+      <div>
+        <Header />
+        <main>
+          <h1>game</h1>
+        </main>
+      </div>
     );
   }
 }
