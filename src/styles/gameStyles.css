@@ -1,23 +1,37 @@
-.bottom-success-border {
-  border: 3px solid rgb(6, 240, 15);
+.button-success {
+  background-color: rgb(6, 240, 15);
+  border-color: rgb(6, 240, 15);
+  color: white;
 }
 
-.bottom-success-border:hover {
-  border: 3px solid rgb(6, 240, 15);
+.button-success:hover {
+  background-color: rgb(6, 240, 15);
+  border-color: rgb(6, 240, 15);
+  color: white;
 }
 
-.bottom-success-border:disabled, .bottom-success-border.disabled {
-  border: 3px solid rgb(6, 240, 15);
+
+.button-success:disabled, .button-success.disabled {
+  background-color: 3px solid rgb(6, 240, 15);
+  border-color: 3px solid rgb(6, 240, 15);
+  color: white;
 }
 
-.bottom-fail-border {
-  border: 3px solid red;
+/* Button Fail Answer */
+.button-danger {
+  background-color: 3px solid red;
+  border-color: 3px solid red;
+  color: white;
 }
 
-.bottom-fail-border:hover {
-  border: 3px solid red;
+.button-danger:hover {
+  background-color: 3px solid red;
+  border-color: 3px solid red;
+  color: white;
 }
 
-.bottom-fail-border:disabled, .bottom-fail-border.disabled {
-  border: 3px solid red;
+.button-danger:disabled, .button-danger.disabled {
+  background-color: 3px solid red;
+  border-color: 3px solid red;
+  color: white;
 }
