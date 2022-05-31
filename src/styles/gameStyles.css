@@ -1,0 +1,23 @@
+.bottom-success-border {
+  border: 3px solid rgb(6, 240, 15);
+}
+
+.bottom-success-border:hover {
+  border: 3px solid rgb(6, 240, 15);
+}
+
+.bottom-success-border:disabled, .bottom-success-border.disabled {
+  border: 3px solid rgb(6, 240, 15);
+}
+
+.bottom-fail-border {
+  border: 3px solid red;
+}
+
+.bottom-fail-border:hover {
+  border: 3px solid red;
+}
+
+.bottom-fail-border:disabled, .bottom-fail-border.disabled {
+  border: 3px solid red;
+}
