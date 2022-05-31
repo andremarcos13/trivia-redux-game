@@ -128,12 +128,6 @@ class Game extends Component {
     const { toAsk } = this.props;
     const { questions } = toAsk;
     const { results } = questions;
-    console.log('teste', seconds);
-    console.log('results', results);
-    console.log(randomizeAnswersState);
-    if (typeof results === 'undefined') {
-      return 'deu ruim';
-    }
     const query = results[questionsCount];
     console.log('query', query);
     // const { category, question } = query;
@@ -214,7 +208,7 @@ Game.defaultProps = {
 };
 
 const mapStateToProps = (state) => ({
-  tokenResponse: state.login.returnToken,
+  tokenResponse: state.tokenSaver,
   toAsk: state.game,
 });
 

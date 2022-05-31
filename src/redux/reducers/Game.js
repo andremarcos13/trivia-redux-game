@@ -7,8 +7,6 @@ const INITIAL_STATE = {
 function game(state = INITIAL_STATE, { type, payload }) {
   switch (type) {
   case QUESTION_SAVER:
-    console.log('Start do Reducer', QUESTION_SAVER);
-    console.log('Payload:', payload);
     return {
       ...state,
       questions: payload,
