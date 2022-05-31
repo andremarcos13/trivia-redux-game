@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
+import md5 from 'crypto-js/md5';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { gravatarThunk, tokenSaver } from '../redux/actions/loginAction';
+import { gravatarAct, tokenSaver } from '../redux/actions/loginAction';
 
 class Login extends Component {
   constructor() {
@@ -37,13 +38,24 @@ class Login extends Component {
 loginHandle = async (event) => {
   event.preventDefault();
   const { history, dispatch } = this.props;
-  const { email, playerName } = this.state;
-  dispatch(gravatarThunk(email, playerName));
   const response = await fetch('https://opentdb.com/api_token.php?command=request');
   const result = await response.json();
   localStorage.setItem('token', result.token);
+  this.gravatarFunc();
   dispatch(tokenSaver(result));
   history.push('/game');
+}
+
+gravatarFunc = async () => {
+  const { dispatch } = this.props;
+  const { email, playerName } = this.state;
+  const hash = md5(email).toString();
+  const url = `https://www.gravatar.com/avatar/${hash}`;
+  const promise = await fetch(url);
+  const result = promise.url;
+  const obj = { name: playerName, score: 0, picture: result };
+  localStorage.setItem('ranking', JSON.stringify(obj));
+  dispatch(gravatarAct(playerName, email));
 }
 
 loginSettings = (event) => {

@@ -1,25 +1,20 @@
-import { SAVE_EMAIL, TOKEN_SAVER } from '../actions/loginAction';
+import { SAVE_EMAIL } from '../actions/loginAction';
 
 const State = {
-  token: '',
-  returnToken: {},
-  gravatar: {},
+  name: '',
+  assertions: 0,
+  score: 0,
+  gravatarEmail: '',
 };
 
-const login = (state = State, { type, payload, gravatar, profileName, returnToken }) => {
+const player = (state = State, { type, gravatar, profileName, email }) => {
   switch (type) {
-  case TOKEN_SAVER:
-    return {
-      ...state,
-      token: payload,
-      returnToken,
-    };
-
   case SAVE_EMAIL:
     return {
       ...state,
       gravatar,
-      profileName,
+      name: profileName,
+      gravatarEmail: email,
     };
 
   default:
@@ -27,4 +22,4 @@ const login = (state = State, { type, payload, gravatar, profileName, returnToke
   }
 };
 
-export default login;
+export default player;

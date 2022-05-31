@@ -111,8 +111,6 @@ class Game extends Component {
     const { toAsk } = this.props;
     const { questions } = toAsk;
     const { results } = questions;
-    console.log('teste', seconds);
-    console.log('results', results);
     if (typeof results === 'undefined') {
       return 'deu ruim';
     }
@@ -188,7 +186,7 @@ Game.propTypes = {
 };
 
 const mapStateToProps = (state) => ({
-  tokenResponse: state.login.returnToken,
+  tokenResponse: state.tokenSaver,
   toAsk: state.game,
 });
 
