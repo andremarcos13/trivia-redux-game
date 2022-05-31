@@ -17,6 +17,7 @@ class Game extends Component {
       questionTimer: true,
       btnNext: false,
       plusplus: 0,
+      randomizeAnswersState: [], // estado das respostas
       classes: 'btn btn-primary',
     };
   }
@@ -27,6 +28,7 @@ class Game extends Component {
     const { questionTimer } = this.state;
     const chave = localStorage.getItem('token');
     await dispatch(fetchAPI(chave));
+    this.ramdomizerAnswers(); // chama funcao para randomizar
     if (questionTimer === true) {
       this.timerDidMount();
     }
@@ -41,9 +43,31 @@ class Game extends Component {
     this.timer = setInterval(this.timerToAnswer, ONE_MILISEC); // The setInterval() method calls a function at specified intervals (in milliseconds).
   }
 
+  ramdomizerAnswers = () => {
+    const { questionsCount } = this.state;
+    const { toAsk } = this.props;
+    const { questions } = toAsk;
+    const { results } = questions;
+    const question = results[questionsCount];
+    const ZERO_DOT_FIVE = 0.5;
+    const toRandomizeAnswers = [
+      ...question.incorrect_answers,
+      question.correct_answer,
+    ];
+    const ramdomAnswers = toRandomizeAnswers.sort(
+      () => Math.random() - ZERO_DOT_FIVE,
+    );
+    console.log('random', ramdomAnswers);
+    this.setState({
+      randomizeAnswersState: ramdomAnswers, // salva resposta em um estado
+    });
+  }
+
   btnNextIplusplus = () => {
     const { plusplus } = this.state;
     const maxQuestions = 4;
+    this.ramdomizerAnswers(); // chama funcao ao clicar no botao next
+
     if (plusplus === maxQuestions) {
       this.setState({ plusplus: 4, btnNext: false });
     } else {
@@ -67,23 +91,6 @@ class Game extends Component {
         redirect: true,
       });
     }
-  }
-
-  ramdomizerAnswers = () => {
-    const { questionsCount } = this.state;
-    const { toAsk } = this.props;
-    const { questions } = toAsk;
-    const { results } = questions;
-    const question = results[questionsCount];
-    const ZERO_DOT_FIVE = 0.5;
-    const toRandomizeAnswers = [
-      ...question.incorrect_answers,
-      question.correct_answer,
-    ];
-    const ramdomAnswers = toRandomizeAnswers.sort(
-      () => Math.random() - ZERO_DOT_FIVE,
-    );
-    return ramdomAnswers;
   }
 
   youAnsweredCorrectly = () => {
@@ -113,6 +120,7 @@ class Game extends Component {
       disableButton,
       btnNext,
       plusplus,
+      randomizeAnswersState,
       classes,
     } = this.state;
     const { toAsk } = this.props;
@@ -120,6 +128,7 @@ class Game extends Component {
     const { results } = questions;
     console.log('teste', seconds);
     console.log('results', results);
+    console.log(randomizeAnswersState);
     if (typeof results === 'undefined') {
       return 'deu ruim';
     }
@@ -138,8 +147,8 @@ class Game extends Component {
             </div>
           </section>
           <section>
-            {this.ramdomizerAnswers()
-              .map((answers = results[plusplus].answers, index) => (
+            {randomizeAnswersState
+              .map((answers, index) => (
                 <button
                   key={ index }
                   disabled={ disableButton }
