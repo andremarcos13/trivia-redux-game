@@ -16,17 +16,6 @@ export const gravatarAct = (resultado, name) => ({
   profileName: name,
 });
 
-export const loginAction = () => async (dispatch) => {
-  try {
-    const response = await fetch('https://opentdb.com/api_token.php?command=request');
-    const result = await response.json();
-    localStorage.setItem('token', result.token);
-    dispatch(tokenSaver(result));
-  } catch (error) {
-    console.log(error);
-  }
-};
-
 export const gravatarThunk = (email, name) => async (dispatch) => {
   try {
     const hash = md5(email).toString();

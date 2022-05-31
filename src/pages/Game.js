@@ -3,65 +3,75 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
 import Header from '../components/Header';
+import { fetchAPI } from '../redux/actions/gameStart';
 
 class Game extends Component {
-  // static propTypes = {
-  //   second: third
-  // }
   constructor() {
     super();
     this.state = {
       redirect: false,
-      apiResponse: {},
+      questionsCount: 0,
     };
   }
 
-  componentDidMount() { // valida token ao montar componente
+  async componentDidMount() {
+    console.log('ola, mundo'); // valida token ao montar componente
+    const { dispatch } = this.props;
+    const chave = localStorage.getItem('token');
+    await dispatch(fetchAPI(chave));
+  }
+
+  componentDidUpdate() {
     this.redirectIfInvalidToken();
   }
 
-  fetchAPI = async () => { // pega API
-    const token = localStorage.getItem('token');
-    // const response = await fetch(`https://opentdb.com/api.php?amount=5&category=${ category }&difficulty=${ difficulty }&token=${ token }`);
-    const response = await fetch(`https://opentdb.com/api.php?amount=5&token=${token}`);
-    const result = await response.json();
-    this.setState({
-      apiResponse: result,
-    });
-  }
-
   redirectIfInvalidToken = () => {
-    const { token } = this.props;
-    const responseCode = Number(token.response_code);
-    const CODE_THREE = 3;
-    if (responseCode === CODE_THREE) {
-      console.log('Seu token expirou!');
-      this.setState({ redirect: true });
-    } else {
-      this.fetchAPI();
-      this.setState({ redirect: false });
+    const { tokenResponse } = this.props;
+    const responseCode = tokenResponse.response_code;
+    if (responseCode !== 0) {
+      localStorage.removeItem('token');
+      this.setState({
+        redirect: true,
+      });
     }
   }
 
-  questionMaker = () => {
-    const { apiResponse } = this.state;
+  ramdomizerAnswers = () => {
+    const { questionsCount } = this.state;
+    const { toAsk } = this.props;
+    const { questions } = toAsk;
+    const { results } = questions;
+    const question = results[questionsCount];
     const ZERO_DOT_FIVE = 0.5;
-    const toRandomizeQuestion = [
-      ...apiResponse.incorrect_answers,
-      apiResponse.correct_answer,
+    const toRandomizeAnswers = [
+      ...question.incorrect_answers,
+      question.correct_answer,
     ];
-    const ramdomQuestions = toRandomizeQuestion.sort(
+    const ramdomAnswers = toRandomizeAnswers.sort(
       () => Math.random() - ZERO_DOT_FIVE,
     );
-    
+    return ramdomAnswers;
+  }
+
+  youAnsweredCorrectly = () => {
+
   }
 
   render() {
-    const { redirect, apiResponse } = this.state;
-    const { results } = apiResponse;
-    const { category, question } = results;
+    const { redirect, questionsCount } = this.state;
+    const { toAsk } = this.props;
+    const { questions } = toAsk;
+    const { results } = questions;
+    console.log(results);
+    if (typeof results === 'undefined') {
+      return 'deu ruim';
+    }
+    const query = results[questionsCount];
+    console.log(query);
+    const { category, question } = query;
     return (
       <>
+        { redirect && <Redirect to="/" /> }
         <Header />
         <main>
           <section>
@@ -72,28 +82,54 @@ class Game extends Component {
             {/* <Timer /> */}
           </section>
           <section>
-            {this.questionMaker()}
+            {this.ramdomizerAnswers().map((answers, index) => (
+              <button
+                key={ index }
+                type="button"
+                data-testid={ () => {
+                  if (answers === query.correct_answer) {
+                    return 'correct-answer';
+                  }
+                  return `wrong-answer-${index}`;
+                } }
+                // onClick={ () => {
+                //   if (answers === query.correct_answer) {
+                //     youAnsweredCorrectly();
+                //   }
+                //   youAnsweredWrong();
+                // } }
+              >
+                {answers}
+
+              </button>
+            ))}
+            {/* <button
+              type="submit"
+              data-testid="btn-next"
+            // onClick={}
+            >
+              Next
+
+            </button> */}
           </section>
         </main>
-        { redirect && <Redirect to="/" /> }
       </>
     );
   }
 }
 
 Game.propTypes = {
-  history: PropTypes.shape({
-    push: PropTypes.func.isRequired,
+  tokenResponse: PropTypes.shape({
+    token: PropTypes.string.isRequired,
+    response_code: PropTypes.number.isRequired,
   }).isRequired,
-  token: PropTypes.shape({
-    response_code: PropTypes.number,
-  }).isRequired,
+  toAsk: PropTypes.shape.isRequired,
+  dispatch: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state) => ({
-  token: state.returnToken,
+  tokenResponse: state.login.returnToken,
+  toAsk: state.game,
 });
-
-// const mapDispatchToProps = {}
 
 export default connect(mapStateToProps, null)(Game);

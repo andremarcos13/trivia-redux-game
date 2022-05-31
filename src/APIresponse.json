@@ -1,0 +1,23 @@
+{
+  "category": "Sports",
+  "type": "multiple",
+  "difficulty": "medium",
+  "question": "Which of these teams isn&#039;t a member of the NHL&#039;s &quot;Original Six&quot; era?",
+  "correct_answer": "Philadelphia Flyers",
+  "incorrect_answers": [
+    "New York Rangers",
+    "Toronto Maple Leafs",
+    "Boston Bruins"
+  ]
+}
+
+{
+  "category": "Geography",
+  "type": "boolean",
+  "difficulty": "medium",
+  "question": "Israel is 7 hours ahead of New York.",
+  "correct_answer": "True",
+  "incorrect_answers": [
+    "False"
+  ]
+}

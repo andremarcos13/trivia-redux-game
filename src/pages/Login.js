@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { gravatarThunk, loginAction } from '../redux/actions/loginAction';
+import { gravatarThunk, tokenSaver } from '../redux/actions/loginAction';
 
 class Login extends Component {
   constructor() {
@@ -34,12 +34,15 @@ class Login extends Component {
     });
   };
 
-loginHandle = (event) => {
+loginHandle = async (event) => {
   event.preventDefault();
   const { history, dispatch } = this.props;
   const { email, playerName } = this.state;
   dispatch(gravatarThunk(email, playerName));
-  dispatch(loginAction());
+  const response = await fetch('https://opentdb.com/api_token.php?command=request');
+  const result = await response.json();
+  localStorage.setItem('token', result.token);
+  dispatch(tokenSaver(result));
   history.push('/game');
 }
 
