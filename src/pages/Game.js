@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
 import Header from '../components/Header';
 import { fetchAPI } from '../redux/actions/gameStart';
+import '../styles/gameStyles.css';
 
 class Game extends Component {
   constructor() {
@@ -11,12 +12,13 @@ class Game extends Component {
     this.state = {
       redirect: false,
       questionsCount: 0,
-      seconds: 5, // acrescenta estado com o valor 30
+      seconds: 30, // acrescenta estado com o valor 30
       disableButton: false, // adiciona estado para controlar botoes de resposta
       questionTimer: true,
       btnNext: false,
       plusplus: 0,
       randomizeAnswersState: [], // estado das respostas
+      classes: 'btn btn-primary',
     };
   }
 
@@ -74,7 +76,7 @@ class Game extends Component {
         disableButton: false,
         questionTimer: true,
         btnNext: false,
-        seconds: 5,
+        seconds: 30,
       });
     }
     this.timerDidMount();
@@ -92,7 +94,10 @@ class Game extends Component {
   }
 
   youAnsweredCorrectly = () => {
-
+    console.log('Você ganhou 1 milhão de reais. Maoê!');
+    this.setState({
+      classes: 'btn btn-success bottom-success-border',
+    });
   }
 
   timerToAnswer = () => {
@@ -116,6 +121,7 @@ class Game extends Component {
       btnNext,
       plusplus,
       randomizeAnswersState,
+      classes,
     } = this.state;
     const { toAsk } = this.props;
     const { questions } = toAsk;
@@ -147,18 +153,19 @@ class Game extends Component {
                   key={ index }
                   disabled={ disableButton }
                   type="button"
+                  className={ classes }
                   data-testid={ () => {
                     if (answers === query.correct_answer) {
                       return 'correct-answer';
                     }
                     return `wrong-answer-${index}`;
                   } }
-                // onClick={ () => {
-                //   if (answers === query.correct_answer) {
-                //     youAnsweredCorrectly();
-                //   }
-                //   youAnsweredWrong();
-                // } }
+                  onClick={ () => {
+                    if (answers === query.correct_answer) {
+                      this.youAnsweredCorrectly();
+                    }
+                    this.youAnsweredWrong();
+                  } }
                 >
                   { answers }
 
