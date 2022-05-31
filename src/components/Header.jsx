@@ -7,17 +7,15 @@ class Header extends Component {
     const { login } = this.props;
     return (
       <header>
-        <div>
-          <span data-testid="header-player-name">
-            {login.profileName}
-          </span>
-          <img
-            src={ login.gravatar }
-            alt="profile"
-            data-testid="header-profile-picture"
-          />
-          <span id="score" data-testid="header-score">0</span>
-        </div>
+        <img
+          src={ `${login.gravatar}` }
+          alt="profile"
+          data-testid="header-profile-picture"
+        />
+        <span data-testid="header-player-name">
+          {login.profileName}
+        </span>
+        <span id="score" data-testid="header-score">0</span>
       </header>
     );
   }
@@ -25,15 +23,13 @@ class Header extends Component {
 
 Header.propTypes = {
   login: PropTypes.shape({
-    gravatar: PropTypes.string,
-    profileName: PropTypes.string,
+    gravatar: PropTypes.string.isRequired,
+    profileName: PropTypes.string.isRequired,
   }).isRequired,
 };
 
 const mapStateToProps = (state) => ({
   login: state.login,
 });
-
-// const mapDispatchToProps = {};
 
 export default connect(mapStateToProps, null)(Header);
