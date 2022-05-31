@@ -35,27 +35,28 @@ class Login extends Component {
     });
   };
 
+  gravatarFunc = async () => {
+    const { dispatch } = this.props;
+    const { email, playerName } = this.state;
+    const hash = md5(email).toString();
+    const url = `https://www.gravatar.com/avatar/${hash}`;
+    const promise = await fetch(url);
+    const result = promise.url;
+    const obj = { name: playerName, score: 0, picture: result };
+    localStorage.setItem('ranking', JSON.stringify(obj));
+    dispatch(gravatarAct(playerName, email));
+  }
+
 loginHandle = async (event) => {
   event.preventDefault();
   const { history, dispatch } = this.props;
   const response = await fetch('https://opentdb.com/api_token.php?command=request');
   const result = await response.json();
+  console.log('Isso é o result', result);
   localStorage.setItem('token', result.token);
   this.gravatarFunc();
   dispatch(tokenSaver(result));
   history.push('/game');
-}
-
-gravatarFunc = async () => {
-  const { dispatch } = this.props;
-  const { email, playerName } = this.state;
-  const hash = md5(email).toString();
-  const url = `https://www.gravatar.com/avatar/${hash}`;
-  const promise = await fetch(url);
-  const result = promise.url;
-  const obj = { name: playerName, score: 0, picture: result };
-  localStorage.setItem('ranking', JSON.stringify(obj));
-  dispatch(gravatarAct(playerName, email));
 }
 
 loginSettings = (event) => {

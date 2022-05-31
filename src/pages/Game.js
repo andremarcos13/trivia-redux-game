@@ -24,7 +24,6 @@ class Game extends Component {
   }
 
   async componentDidMount() {
-    console.log('ola, mundo'); // valida token ao montar componente
     const { dispatch } = this.props;
     const { questionTimer } = this.state;
     const chave = localStorage.getItem('token');
@@ -58,7 +57,6 @@ class Game extends Component {
     const ramdomAnswers = toRandomizeAnswers.sort(
       () => Math.random() - ZERO_DOT_FIVE,
     );
-    console.log('random', ramdomAnswers);
     this.setState({
       randomizeAnswersState: ramdomAnswers, // salva resposta em um estado
     });
@@ -97,7 +95,6 @@ class Game extends Component {
   }
 
   youAnsweredCorrectly = () => {
-    console.log('Você ganhou 1 milhão de reais. Maoê!');
     this.setState({
       classes: 'btn button-success',
     });
@@ -129,8 +126,11 @@ class Game extends Component {
     const { toAsk } = this.props;
     const { questions } = toAsk;
     const { results } = questions;
-    const success = 'btn button-success';
+    if (typeof results === 'undefined') {
+      return 'Loading';
+    } // NÃO REMOVA ESSA PORRA... NUNCA!
     const query = results[questionsCount];
+    const success = 'btn button-success';
     return (
       <>
         { redirect && <Redirect to="/" /> }
