@@ -11,17 +11,23 @@ class Game extends Component {
     this.state = {
       redirect: false,
       questionsCount: 0,
-      seconds: 30, // acrescenta estado com o valor 30
+      seconds: 5, // acrescenta estado com o valor 30
       disableButton: false, // adiciona estado para controlar botoes de resposta
+      questionTimer: true,
+      btnNext: false,
+      plusplus: 0,
     };
   }
 
   async componentDidMount() {
     console.log('ola, mundo'); // valida token ao montar componente
     const { dispatch } = this.props;
+    const { questionTimer } = this.state;
     const chave = localStorage.getItem('token');
     await dispatch(fetchAPI(chave));
-    this.timerDidMount();
+    if (questionTimer === true) {
+      this.timerDidMount();
+    }
   }
 
   componentDidUpdate() {
@@ -31,6 +37,22 @@ class Game extends Component {
   timerDidMount = () => {
     const ONE_MILISEC = 1000; // 1 second = 1000 milliseconds.
     this.timer = setInterval(this.timerToAnswer, ONE_MILISEC); // The setInterval() method calls a function at specified intervals (in milliseconds).
+  }
+
+  btnNextIplusplus = () => {
+    const { plusplus } = this.state;
+    if (plusplus === 4) {
+      this.setState({ plusplus: 4, btnNext: false });
+    } else {
+      this.setState({
+        plusplus: plusplus + 1,
+        disableButton: false,
+        questionTimer: true,
+        btnNext: false,
+        seconds: 5,
+      });
+    }
+    this.timerDidMount();
   }
 
   redirectIfInvalidToken = () => {
@@ -73,23 +95,29 @@ class Game extends Component {
       });
     } else {
       clearInterval(this.timer); // The setInterval() method continues calling the function until clearInterval() is called, or the window is closed.
-      this.setState({ disableButton: true });
+      this.setState({ disableButton: true, questionTimer: false, btnNext: true });
     }
   }
 
   render() {
-    const { redirect, questionsCount, seconds, disableButton } = this.state;
+    const {
+      redirect,
+      questionsCount,
+      seconds,
+      disableButton,
+      btnNext,
+      plusplus } = this.state;
     const { toAsk } = this.props;
     const { questions } = toAsk;
     const { results } = questions;
     console.log('teste', seconds);
-    console.log(results);
+    console.log('results', results);
     if (typeof results === 'undefined') {
       return 'deu ruim';
     }
     const query = results[questionsCount];
-    console.log(query);
-    const { category, question } = query;
+    console.log('query', query);
+    // const { category, question } = query;
     return (
       <>
         { redirect && <Redirect to="/" /> }
@@ -97,13 +125,13 @@ class Game extends Component {
         <main>
           <section>
             <div>
-              <span data-testid="question-category">{ category }</span>
-              <span data-testid="question-text">{ question }</span>
+              <span data-testid="question-category">{ results[plusplus].category }</span>
+              <span data-testid="question-text">{ results[plusplus].question }</span>
             </div>
             {/* <Timer /> */}
           </section>
           <section>
-            {this.ramdomizerAnswers().map((answers, index) => (
+            {this.ramdomizerAnswers().map((answers = results[plusplus].answers, index) => (
               <button
                 key={ index }
                 disabled={ disableButton }
@@ -121,21 +149,24 @@ class Game extends Component {
                 //   youAnsweredWrong();
                 // } }
               >
-                {answers}
+                { answers }
 
               </button>
             ))}
-            {/* <button
-              type="submit"
-              data-testid="btn-next"
-            // onClick={}
-            >
-              Next
 
-            </button> */}
             <h1>
               {`Tempo: ${seconds}`}
             </h1>
+            {
+              btnNext && <button
+                type="submit"
+                data-testid="btn-next"
+                onClick={ this.btnNextIplusplus }
+              >
+                Next
+              </button>
+            }
+
           </section>
         </main>
       </>
