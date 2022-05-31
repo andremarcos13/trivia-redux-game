@@ -41,7 +41,8 @@ class Game extends Component {
 
   btnNextIplusplus = () => {
     const { plusplus } = this.state;
-    if (plusplus === 4) {
+    const maxQuestions = 4;
+    if (plusplus === maxQuestions) {
       this.setState({ plusplus: 4, btnNext: false });
     } else {
       this.setState({
@@ -131,28 +132,29 @@ class Game extends Component {
             {/* <Timer /> */}
           </section>
           <section>
-            {this.ramdomizerAnswers().map((answers = results[plusplus].answers, index) => (
-              <button
-                key={ index }
-                disabled={ disableButton }
-                type="button"
-                data-testid={ () => {
-                  if (answers === query.correct_answer) {
-                    return 'correct-answer';
-                  }
-                  return `wrong-answer-${index}`;
-                } }
+            {this.ramdomizerAnswers()
+              .map((answers = results[plusplus].answers, index) => (
+                <button
+                  key={ index }
+                  disabled={ disableButton }
+                  type="button"
+                  data-testid={ () => {
+                    if (answers === query.correct_answer) {
+                      return 'correct-answer';
+                    }
+                    return `wrong-answer-${index}`;
+                  } }
                 // onClick={ () => {
                 //   if (answers === query.correct_answer) {
                 //     youAnsweredCorrectly();
                 //   }
                 //   youAnsweredWrong();
                 // } }
-              >
-                { answers }
+                >
+                  { answers }
 
-              </button>
-            ))}
+                </button>
+              ))}
 
             <h1>
               {`Tempo: ${seconds}`}
@@ -164,7 +166,7 @@ class Game extends Component {
                 onClick={ this.btnNextIplusplus }
               >
                 Next
-              </button>
+                         </button>
             }
 
           </section>
