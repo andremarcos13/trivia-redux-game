@@ -61,6 +61,18 @@ class Game extends Component {
 
   }
 
+  timerToAnswer = () => {
+    const { seconds } = this.state;
+    if (seconds > 0) {
+      this.setState({
+        seconds: seconds - 1,
+      });
+    } else {
+      clearInterval(this.timer);
+      this.setState({ disableButton: true });
+    }
+  }
+
   render() {
     const { redirect, questionsCount, seconds, disableButton } = this.state;
     const { toAsk } = this.props;
