@@ -19,7 +19,7 @@ class Game extends Component {
   async componentDidMount() {
     console.log('ola, mundo'); // valida token ao montar componente
     const { dispatch } = this.props;
-    const ONE_MILISEC = 1000;
+    const ONE_MILISEC = 1000; // 1 second = 1000 milliseconds.
     const chave = localStorage.getItem('token');
     await dispatch(fetchAPI(chave));
     this.timer = setInterval(this.timerToAnswer, ONE_MILISEC); // The setInterval() method calls a function at specified intervals (in milliseconds).
@@ -68,7 +68,7 @@ class Game extends Component {
         seconds: seconds - 1,
       });
     } else {
-      clearInterval(this.timer);
+      clearInterval(this.timer); // The setInterval() method continues calling the function until clearInterval() is called, or the window is closed.
       this.setState({ disableButton: true });
     }
   }
