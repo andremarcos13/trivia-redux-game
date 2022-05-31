@@ -19,14 +19,18 @@ class Game extends Component {
   async componentDidMount() {
     console.log('ola, mundo'); // valida token ao montar componente
     const { dispatch } = this.props;
-    const ONE_MILISEC = 1000; // 1 second = 1000 milliseconds.
     const chave = localStorage.getItem('token');
     await dispatch(fetchAPI(chave));
-    this.timer = setInterval(this.timerToAnswer, ONE_MILISEC); // The setInterval() method calls a function at specified intervals (in milliseconds).
+    this.timerDidMount();
   }
 
   componentDidUpdate() {
     this.redirectIfInvalidToken();
+  }
+
+  timerDidMount = () => {
+    const ONE_MILISEC = 1000; // 1 second = 1000 milliseconds.
+    this.timer = setInterval(this.timerToAnswer, ONE_MILISEC); // The setInterval() method calls a function at specified intervals (in milliseconds).
   }
 
   redirectIfInvalidToken = () => {
