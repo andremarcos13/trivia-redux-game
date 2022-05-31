@@ -16,7 +16,7 @@ class Game extends Component {
       questionTimer: true,
       btnNext: false,
       plusplus: 0,
-      randomizeAnswersState: [],
+      randomizeAnswersState: [], // estado das respostas
     };
   }
 
@@ -26,7 +26,7 @@ class Game extends Component {
     const { questionTimer } = this.state;
     const chave = localStorage.getItem('token');
     await dispatch(fetchAPI(chave));
-    this.ramdomizerAnswers();
+    this.ramdomizerAnswers(); // chama funcao para randomizar
     if (questionTimer === true) {
       this.timerDidMount();
     }
@@ -57,14 +57,14 @@ class Game extends Component {
     );
     console.log('random', ramdomAnswers);
     this.setState({
-      randomizeAnswersState: ramdomAnswers,
+      randomizeAnswersState: ramdomAnswers, // salva resposta em um estado
     });
   }
 
   btnNextIplusplus = () => {
     const { plusplus } = this.state;
     const maxQuestions = 4;
-    this.ramdomizerAnswers();
+    this.ramdomizerAnswers(); // chama funcao ao clicar no botao next
 
     if (plusplus === maxQuestions) {
       this.setState({ plusplus: 4, btnNext: false });
