@@ -11,16 +11,18 @@ class Game extends Component {
     this.state = {
       redirect: false,
       questionsCount: 0,
-      seconds: 30,
-      disableButton: false,
+      seconds: 30, // acrescenta estado com o valor 30
+      disableButton: false, // adiciona estado para controlar botoes de resposta
     };
   }
 
   async componentDidMount() {
     console.log('ola, mundo'); // valida token ao montar componente
     const { dispatch } = this.props;
+    const ONE_MILISEC = 1000;
     const chave = localStorage.getItem('token');
     await dispatch(fetchAPI(chave));
+    this.timer = setInterval(this.timerToAnswer, ONE_MILISEC); // The setInterval() method calls a function at specified intervals (in milliseconds).
   }
 
   componentDidUpdate() {
@@ -64,7 +66,7 @@ class Game extends Component {
     const { toAsk } = this.props;
     const { questions } = toAsk;
     const { results } = questions;
-    console.log('execucao do timer', seconds);
+    console.log('teste', seconds);
     console.log(results);
     if (typeof results === 'undefined') {
       return 'deu ruim';
