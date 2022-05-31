@@ -1,19 +1,18 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
 
 class Header extends Component {
   render() {
-    const { login } = this.props;
+    const gravatar = localStorage.getItem('ranking');
+    const pegandoObj = JSON.parse(gravatar);
     return (
       <header>
         <img
-          src={ `${login.gravatar}` }
+          src={ `${pegandoObj.picture}` }
           alt="profile"
           data-testid="header-profile-picture"
         />
         <span data-testid="header-player-name">
-          {login.profileName}
+          {pegandoObj.name}
         </span>
         <span id="score" data-testid="header-score">0</span>
       </header>
@@ -21,15 +20,4 @@ class Header extends Component {
   }
 }
 
-Header.propTypes = {
-  login: PropTypes.shape({
-    gravatar: PropTypes.string.isRequired,
-    profileName: PropTypes.string.isRequired,
-  }).isRequired,
-};
-
-const mapStateToProps = (state) => ({
-  login: state.login,
-});
-
-export default connect(mapStateToProps, null)(Header);
+export default Header;

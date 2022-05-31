@@ -13,7 +13,7 @@ class Game extends Component {
     this.state = {
       redirect: false,
       questionsCount: 0,
-      seconds: 30, // acrescenta estado com o valor 30
+      seconds: 5, // acrescenta estado com o valor 30
       disableButton: false, // adiciona estado para controlar botoes de resposta
       questionTimer: true,
       btnNext: false,
@@ -70,14 +70,16 @@ class Game extends Component {
     this.ramdomizerAnswers(); // chama funcao ao clicar no botao next
 
     if (plusplus === maxQuestions) {
-      this.setState({ plusplus: 4, btnNext: false });
+      this.setState({ plusplus: 4, btnNext: false }); // se o estado do plusplus estiver no fim do array
+      const { history } = this.props;
+      history.push('/feedback'); // vai pra pagina de feedback
     } else {
       this.setState({
         plusplus: plusplus + 1,
         disableButton: false,
         questionTimer: true,
         btnNext: false,
-        seconds: 30,
+        seconds: 5,
       });
     }
     this.timerDidMount();
@@ -202,10 +204,17 @@ Game.propTypes = {
   }).isRequired,
   toAsk: PropTypes.shape.isRequired,
   dispatch: PropTypes.func.isRequired,
+  history: PropTypes.shape({
+    push: PropTypes.func.isRequired,
+  }),
+};
+
+Game.defaultProps = {
+  history: null,
 };
 
 const mapStateToProps = (state) => ({
-  tokenResponse: state.login.returnToken,
+  tokenResponse: state.tokenSaver,
   toAsk: state.game,
 });
 
