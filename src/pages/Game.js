@@ -9,6 +9,7 @@ import '../styles/gameStyles.css';
 class Game extends Component {
   constructor() {
     super();
+
     this.state = {
       redirect: false,
       questionsCount: 0,
@@ -96,7 +97,7 @@ class Game extends Component {
   youAnsweredCorrectly = () => {
     console.log('Você ganhou 1 milhão de reais. Maoê!');
     this.setState({
-      classes: 'btn btn-success bottom-success-border',
+      classes: 'btn button-success',
     });
   }
 
@@ -126,15 +127,8 @@ class Game extends Component {
     const { toAsk } = this.props;
     const { questions } = toAsk;
     const { results } = questions;
-    console.log('teste', seconds);
-    console.log('results', results);
-    console.log(randomizeAnswersState);
-    if (typeof results === 'undefined') {
-      return 'deu ruim';
-    }
+    const success = 'btn button-success';
     const query = results[questionsCount];
-    console.log('query', query);
-    // const { category, question } = query;
     return (
       <>
         { redirect && <Redirect to="/" /> }
@@ -153,7 +147,13 @@ class Game extends Component {
                   key={ index }
                   disabled={ disableButton }
                   type="button"
-                  className={ classes }
+                  className={ () => {
+                    if (answers === query.correct_answer
+                    && classes === success) {
+                      return success;
+                    }
+                    return 'btn button-danger';
+                  } }
                   data-testid={ () => {
                     if (answers === query.correct_answer) {
                       return 'correct-answer';
