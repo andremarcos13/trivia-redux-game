@@ -11,6 +11,8 @@ class Game extends Component {
     this.state = {
       redirect: false,
       questionsCount: 0,
+      seconds: 30,
+      disableButton: false,
     };
   }
 
@@ -58,10 +60,11 @@ class Game extends Component {
   }
 
   render() {
-    const { redirect, questionsCount } = this.state;
+    const { redirect, questionsCount, seconds, disableButton } = this.state;
     const { toAsk } = this.props;
     const { questions } = toAsk;
     const { results } = questions;
+    console.log('execucao do timer', seconds);
     console.log(results);
     if (typeof results === 'undefined') {
       return 'deu ruim';
@@ -85,6 +88,7 @@ class Game extends Component {
             {this.ramdomizerAnswers().map((answers, index) => (
               <button
                 key={ index }
+                disabled={ disableButton }
                 type="button"
                 data-testid={ () => {
                   if (answers === query.correct_answer) {
@@ -111,6 +115,9 @@ class Game extends Component {
               Next
 
             </button> */}
+            <h1>
+              {`Tempo: ${seconds}`}
+            </h1>
           </section>
         </main>
       </>
