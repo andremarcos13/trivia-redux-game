@@ -12,7 +12,7 @@ class Game extends Component {
     this.state = {
       redirect: false,
       questionsCount: 0,
-      seconds: 30, // acrescenta estado com o valor 30
+      seconds: 5, // acrescenta estado com o valor 30
       disableButton: false, // adiciona estado para controlar botoes de resposta
       questionTimer: true,
       btnNext: false,
@@ -70,13 +70,15 @@ class Game extends Component {
 
     if (plusplus === maxQuestions) {
       this.setState({ plusplus: 4, btnNext: false });
+      const { history } = this.props;
+      history.push('/feedback');
     } else {
       this.setState({
         plusplus: plusplus + 1,
         disableButton: false,
         questionTimer: true,
         btnNext: false,
-        seconds: 30,
+        seconds: 5,
       });
     }
     this.timerDidMount();
@@ -202,6 +204,13 @@ Game.propTypes = {
   }).isRequired,
   toAsk: PropTypes.shape.isRequired,
   dispatch: PropTypes.func.isRequired,
+  history: PropTypes.shape({
+    push: PropTypes.func.isRequired,
+  }),
+};
+
+Game.defaultProps = {
+  history: null,
 };
 
 const mapStateToProps = (state) => ({
