@@ -69,9 +69,9 @@ class Game extends Component {
     this.ramdomizerAnswers(); // chama funcao ao clicar no botao next
 
     if (plusplus === maxQuestions) {
-      this.setState({ plusplus: 4, btnNext: false });
+      this.setState({ plusplus: 4, btnNext: false }); // se o estado do plusplus estiver no fim do array
       const { history } = this.props;
-      history.push('/feedback');
+      history.push('/feedback'); // vai pra pagina de feedback
     } else {
       this.setState({
         plusplus: plusplus + 1,
