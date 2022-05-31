@@ -129,7 +129,6 @@ class Game extends Component {
               <span data-testid="question-category">{ results[plusplus].category }</span>
               <span data-testid="question-text">{ results[plusplus].question }</span>
             </div>
-            {/* <Timer /> */}
           </section>
           <section>
             {this.ramdomizerAnswers()
@@ -160,13 +159,16 @@ class Game extends Component {
               {`Tempo: ${seconds}`}
             </h1>
             {
-              btnNext && <button
-                type="submit"
-                data-testid="btn-next"
-                onClick={ this.btnNextIplusplus }
-              >
-                Next
-                         </button>
+              btnNext
+              && (
+                <button
+                  type="submit"
+                  data-testid="btn-next"
+                  onClick={ this.btnNextIplusplus }
+                >
+                  Next
+                </button>
+              )
             }
 
           </section>
