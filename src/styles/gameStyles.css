@@ -1,37 +1,20 @@
+/*  Default Button */
+.btn-primary {
+  background-color: #0d6efd;
+  border-color: #0d6efd;
+  color: white;
+}
+
+/* Button Success Answer */
 .button-success {
-  background-color: rgb(6, 240, 15);
-  border-color: rgb(6, 240, 15);
-  color: white;
-}
-
-.button-success:hover {
-  background-color: rgb(6, 240, 15);
-  border-color: rgb(6, 240, 15);
-  color: white;
-}
-
-
-.button-success:disabled, .button-success.disabled {
-  background-color: 3px solid rgb(6, 240, 15);
-  border-color: 3px solid rgb(6, 240, 15);
+  background-color: #0d6efd;
+  border: 3px solid rgb(6, 240, 15);
   color: white;
 }
 
 /* Button Fail Answer */
 .button-danger {
-  background-color: 3px solid red;
-  border-color: 3px solid red;
-  color: white;
-}
-
-.button-danger:hover {
-  background-color: 3px solid red;
-  border-color: 3px solid red;
-  color: white;
-}
-
-.button-danger:disabled, .button-danger.disabled {
-  background-color: 3px solid red;
-  border-color: 3px solid red;
+  background-color: #0d6efd;
+  border: 3px solid red;
   color: white;
 }
