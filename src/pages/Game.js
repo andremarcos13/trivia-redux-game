@@ -13,9 +13,9 @@ class Game extends Component {
     this.state = {
       redirect: false,
       questionsCount: 0,
-      seconds: 5, // acrescenta estado com o valor 30
+      seconds: 200, // acrescenta estado com o valor 30
       disableButton: false, // adiciona estado para controlar botoes de resposta
-      questionTimer: true,
+      // questionTimer: true,
       btnNext: false,
       plusplus: 0,
       randomizeAnswersState: [], // estado das respostas
@@ -25,23 +25,23 @@ class Game extends Component {
 
   async componentDidMount() {
     const { dispatch } = this.props;
-    const { questionTimer } = this.state;
+    // const { questionTimer } = this.state;
     const chave = localStorage.getItem('token');
     await dispatch(fetchAPI(chave));
     this.ramdomizerAnswers(); // chama funcao para randomizar
-    if (questionTimer === true) {
-      this.timerDidMount();
-    }
+    // if (questionTimer === true) {
+    //   this.timerDidMount();
+    // }
   }
 
   componentDidUpdate() {
     this.redirectIfInvalidToken();
   }
 
-  timerDidMount = () => {
-    const ONE_MILISEC = 1000; // 1 second = 1000 milliseconds.
-    this.timer = setInterval(this.timerToAnswer, ONE_MILISEC); // The setInterval() method calls a function at specified intervals (in milliseconds).
-  }
+  // timerDidMount = () => {
+  //   const ONE_MILISEC = 1000; // 1 second = 1000 milliseconds.
+  //   this.timer = setInterval(this.timerToAnswer, ONE_MILISEC); // The setInterval() method calls a function at specified intervals (in milliseconds).
+  // }
 
   ramdomizerAnswers = () => {
     const { questionsCount } = this.state;
@@ -75,9 +75,9 @@ class Game extends Component {
       this.setState({
         plusplus: plusplus + 1,
         disableButton: false,
-        questionTimer: true,
+        // questionTimer: true,
         btnNext: false,
-        seconds: 5,
+        seconds: 200,
       });
     }
     this.timerDidMount();
@@ -94,24 +94,67 @@ class Game extends Component {
     }
   }
 
+  // timerToAnswer = () => {
+  //   const { seconds } = this.state;
+  //   if (seconds > 0) {
+  //     this.setState({
+  //       seconds: seconds - 1,
+  //     });
+  //   } else {
+  //     clearInterval(this.timer); // The setInterval() method continues calling the function until clearInterval() is called, or the window is closed.
+  //     this.setState({ disableButton: true, questionTimer: false, btnNext: true });
+  //   }
+  // }
+
   youAnsweredCorrectly = () => {
+    console.log('Correto chamado!');
     this.setState({
       classes: 'btn button-success',
+    }, () => {
+      console.log('Set State Chamado para sucesso!');
     });
   }
 
-  timerToAnswer = () => {
-    const { seconds } = this.state;
-    if (seconds > 0) {
-      this.setState({
-        seconds: seconds - 1,
-      });
-    } else {
-      clearInterval(this.timer); // The setInterval() method continues calling the function until clearInterval() is called, or the window is closed.
-      this.setState({ disableButton: true, questionTimer: false, btnNext: true });
-    }
+  youAnsweredWrong = () => {
+    console.log('Errado chamado!');
+    this.setState({
+      classes: 'btn button-danger',
+    }, () => {
+      console.log('Set State Chamado para errado!');
+    });
   }
 
+  // classes padrão: 'btn btn-primary' sucesso: 'button-success' erro: 'button-danger'
+  classDecider = (classes, answers, query, index) => {
+    console.log('Classe atual no state:', classes);
+    console.log('Qual a resposta clicada?', answers);
+    console.log('Qual pergunta certa?', query.correct_answer);
+    // console.log('Em que pé estamos no index?', index);
+    // console.log('Qual pergunta errada?', query.incorrect_answers[index - 1]);
+    if (classes === 'button-success'
+    && answers === query.correct_answer) {
+      console.log('Estou retornando Verdade');
+      return 'button-success';
+    }
+    if (classes === 'button-danger'
+    && answers === query.incorrect_answers[index - 1]) {
+      console.log('Estou retornando Erro');
+      return 'button-danger';
+    }
+    console.log('Estou retornando Primário');
+    return 'btn btn-primary';
+  }
+
+  // O que está acontecendo?
+  // a função classDecider está retornando apenas 'btn btn-primary' mesmo quando a entrada no parâmetro classes é 'button-success'.
+  // Por algum motivo os parâmetros answer e query estão entrando como boleanos sendo que são strings.
+  // isso não cauda nenhum problema já que if true === true ou if true === false também funciona.
+  // query.correct_answer sempre tem o valor booleano true não sei pq...
+  // answers muda de valor booleano toda hora
+  // onClick e as funções youAnsweredCorrectly e youAnsweredWrong estão funcionando corretamente sempre.
+  // já verifiquei o state e o redux. Tudo correto. O erro está na classDecider.
+
+  // Alguem precisa olhar se as classes CSS estão certas no arquivo ou se há algum erro CSS.
   render() {
     const {
       redirect,
@@ -120,8 +163,8 @@ class Game extends Component {
       disableButton,
       btnNext,
       plusplus,
-      randomizeAnswersState,
       classes,
+      randomizeAnswersState,
     } = this.state;
     const { toAsk } = this.props;
     const { questions } = toAsk;
@@ -130,7 +173,6 @@ class Game extends Component {
       return 'Loading';
     } // NÃO REMOVA ESSA PORRA... NUNCA!
     const query = results[questionsCount];
-    const success = 'btn button-success';
     return (
       <>
         { redirect && <Redirect to="/" /> }
@@ -139,7 +181,9 @@ class Game extends Component {
           <section>
             <div>
               <span data-testid="question-category">{ results[plusplus].category }</span>
+              <hr />
               <span data-testid="question-text">{ results[plusplus].question }</span>
+              <hr />
             </div>
           </section>
           <section>
@@ -149,22 +193,16 @@ class Game extends Component {
                   key={ index }
                   disabled={ disableButton }
                   type="button"
-                  className={ () => {
-                    if (answers === query.correct_answer
-                    && classes === success) {
-                      return success;
-                    }
-                    return 'btn button-danger';
-                  } }
-                  data-testid={ () => {
-                    if (answers === query.correct_answer) {
-                      return 'correct-answer';
-                    }
-                    return `wrong-answer-${index}`;
-                  } }
+                  className={ this.classDecider(classes, answers, query, index) }
+                  // className={ classes }
+                  data-testid={
+                    answers === query.correct_answer
+                      ? 'correct-answer'
+                      : `wrong-answer-${index}`
+                  }
                   onClick={ () => {
                     if (answers === query.correct_answer) {
-                      this.youAnsweredCorrectly();
+                      return this.youAnsweredCorrectly();
                     }
                     this.youAnsweredWrong();
                   } }

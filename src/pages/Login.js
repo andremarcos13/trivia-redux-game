@@ -52,7 +52,6 @@ loginHandle = async (event) => {
   const { history, dispatch } = this.props;
   const response = await fetch('https://opentdb.com/api_token.php?command=request');
   const result = await response.json();
-  console.log('Isso é o result', result);
   localStorage.setItem('token', result.token);
   this.gravatarFunc();
   dispatch(tokenSaver(result));
