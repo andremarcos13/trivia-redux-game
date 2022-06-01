@@ -17,7 +17,7 @@ class Game extends Component {
       questionsCount: 0,
       seconds: 200, // acrescenta estado com o valor 30
       disableButton: false, // adiciona estado para controlar botoes de resposta
-      // questionTimer: true,
+      questionTimer: true,
       btnNext: false,
       plusplus: 0,
       randomizeAnswersState: [], // estado das respostas
@@ -152,19 +152,21 @@ class Game extends Component {
                   return (
                     <CorrectButton
                       key={ index }
+                      index={ index }
                       disableButton={ disableButton }
                       wasItAnswered={ wasItAnswered }
                       answers={ answers }
-                      youAnswered={ this.youAnswered() }
+                      youAnswered={ this.youAnswered }
                     />);
                 }
                 return (
                   <IncorrectButton
                     key={ index }
+                    index={ index }
                     disableButton={ disableButton }
                     wasItAnswered={ wasItAnswered }
                     answers={ answers }
-                    youAnswered={ this.youAnswered() }
+                    youAnswered={ this.youAnswered }
                   />);
               })}
 

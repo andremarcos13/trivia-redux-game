@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
 import PropType from 'prop-types';
+import '../styles/gameStyles.css';
 
 export default class IncorrectButton extends Component {
   render() {
     const {
-      key,
+      index,
       disableButton,
       wasItAnswered,
       answers,
@@ -12,11 +13,11 @@ export default class IncorrectButton extends Component {
     } = this.props;
     return (
       <button
-        key={ key }
+        index={ index }
         disabled={ disableButton }
         type="button"
         className={ wasItAnswered ? 'button-danger' : 'btn btn-primary' }
-        data-testid={ `wrong-answer-${key}` }
+        data-testid={ `wrong-answer-${index}` }
         onClick={ youAnswered }
       >
         { answers }
@@ -27,7 +28,7 @@ export default class IncorrectButton extends Component {
 }
 
 IncorrectButton.propTypes = {
-  key: PropType.number.isRequired,
+  index: PropType.number.isRequired,
   disableButton: PropType.bool.isRequired,
   wasItAnswered: PropType.bool.isRequired,
   answers: PropType.string.isRequired,
