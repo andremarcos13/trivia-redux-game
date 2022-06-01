@@ -15,7 +15,7 @@ class Game extends Component {
     this.state = {
       redirect: false,
       questionsCount: 0,
-      seconds: 200, // acrescenta estado com o valor 30
+      seconds: 30, // acrescenta estado com o valor 30
       disableButton: false, // adiciona estado para controlar botoes de resposta
       questionTimer: true,
       btnNext: false,
@@ -79,7 +79,7 @@ class Game extends Component {
         disableButton: false,
         questionTimer: true,
         btnNext: false,
-        seconds: 200,
+        seconds: 30,
       });
     }
     this.timerDidMount();
