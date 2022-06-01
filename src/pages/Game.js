@@ -27,23 +27,23 @@ class Game extends Component {
 
   async componentDidMount() {
     const { dispatch } = this.props;
-    // const { questionTimer } = this.state;
+    const { questionTimer } = this.state;
     const chave = localStorage.getItem('token');
     await dispatch(fetchAPI(chave));
     this.ramdomizerAnswers(); // chama funcao para randomizar
-    // if (questionTimer === true) {
-    //   this.timerDidMount();
-    // }
+    if (questionTimer === true) {
+      this.timerDidMount();
+    }
   }
 
   componentDidUpdate() {
     this.redirectIfInvalidToken();
   }
 
-  // timerDidMount = () => {
-  //   const ONE_MILISEC = 1000; // 1 second = 1000 milliseconds.
-  //   this.timer = setInterval(this.timerToAnswer, ONE_MILISEC); // The setInterval() method calls a function at specified intervals (in milliseconds).
-  // }
+  timerDidMount = () => {
+    const ONE_MILISEC = 1000; // 1 second = 1000 milliseconds.
+    this.timer = setInterval(this.timerToAnswer, ONE_MILISEC); // The setInterval() method calls a function at specified intervals (in milliseconds).
+  }
 
   ramdomizerAnswers = () => {
     const { questionsCount } = this.state;
@@ -77,7 +77,7 @@ class Game extends Component {
       this.setState({
         plusplus: plusplus + 1,
         disableButton: false,
-        // questionTimer: true,
+        questionTimer: true,
         btnNext: false,
         seconds: 200,
       });
@@ -96,17 +96,17 @@ class Game extends Component {
     }
   }
 
-  // timerToAnswer = () => {
-  //   const { seconds } = this.state;
-  //   if (seconds > 0) {
-  //     this.setState({
-  //       seconds: seconds - 1,
-  //     });
-  //   } else {
-  //     clearInterval(this.timer); // The setInterval() method continues calling the function until clearInterval() is called, or the window is closed.
-  //     this.setState({ disableButton: true, questionTimer: false, btnNext: true });
-  //   }
-  // }
+  timerToAnswer = () => {
+    const { seconds } = this.state;
+    if (seconds > 0) {
+      this.setState({
+        seconds: seconds - 1,
+      });
+    } else {
+      clearInterval(this.timer); // The setInterval() method continues calling the function until clearInterval() is called, or the window is closed.
+      this.setState({ disableButton: true, questionTimer: false, btnNext: true });
+    }
+  }
 
   youAnswered = () => {
     this.setState({

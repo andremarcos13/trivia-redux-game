@@ -11,10 +11,15 @@ class Header extends Component {
           alt="profile"
           data-testid="header-profile-picture"
         />
+        <hr />
+        <span>Player: </span>
         <span data-testid="header-player-name">
           {pegandoObj.name}
         </span>
+        <hr />
+        <span>Score: </span>
         <span id="score" data-testid="header-score">0</span>
+        <hr />
       </header>
     );
   }
