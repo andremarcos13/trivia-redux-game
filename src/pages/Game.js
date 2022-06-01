@@ -131,12 +131,12 @@ class Game extends Component {
     console.log('Qual pergunta certa?', query.correct_answer);
     // console.log('Em que pé estamos no index?', index);
     // console.log('Qual pergunta errada?', query.incorrect_answers[index - 1]);
-    if (classes === 'button-success'
+    if (classes === 'btn button-success'
     && answers === query.correct_answer) {
       console.log('Estou retornando Verdade');
       return 'button-success';
     }
-    if (classes === 'button-danger'
+    if (classes === 'btn button-danger'
     && answers === query.incorrect_answers[index - 1]) {
       console.log('Estou retornando Erro');
       return 'button-danger';
