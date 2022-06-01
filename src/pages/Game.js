@@ -19,7 +19,6 @@ class Game extends Component {
       disableButton: false, // adiciona estado para controlar botoes de resposta
       questionTimer: true,
       btnNext: false,
-      plusplus: 0,
       randomizeAnswersState: [], // estado das respostas
       wasItAnswered: false,
     };
@@ -50,7 +49,7 @@ class Game extends Component {
     const { toAsk } = this.props;
     const { questions } = toAsk;
     const { results } = questions;
-    const question = results[questionsCount];
+    const question = results[questionsCount]; // <<<< ERRO
     const ZERO_DOT_FIVE = 0.5;
     const toRandomizeAnswers = [
       ...question.incorrect_answers,
@@ -60,27 +59,30 @@ class Game extends Component {
       () => Math.random() - ZERO_DOT_FIVE,
     );
     this.setState({
-      randomizeAnswersState: ramdomAnswers, // salva resposta em um estado
+      randomizeAnswersState: ramdomAnswers,
+      questionsCount: questionsCount + 1, // salva resposta em um estado
     });
   }
 
   btnNextIplusplus = () => {
-    const { plusplus } = this.state;
-    const maxQuestions = 4;
-    this.ramdomizerAnswers(); // chama funcao ao clicar no botao next
-
-    if (plusplus === maxQuestions) {
-      this.setState({ plusplus: 4, btnNext: false }); // se o estado do plusplus estiver no fim do array
-      const { history } = this.props;
+    const { questionsCount } = this.state;
+    const { history } = this.props;
+    const maxQuestions = 4; // chama funcao ao clicar no botao next
+    if (questionsCount === maxQuestions) {
+      this.setState({
+        questionsCount: 4,
+        btnNext: false,
+      }); // se o estado do plusplus estiver no fim do array
       history.push('/feedback'); // vai pra pagina de feedback
     } else {
-      this.setState({
-        plusplus: plusplus + 1,
+      this.setState(() => ({
+        // questionsCount: questionsCount + 1,
         disableButton: false,
         questionTimer: true,
         btnNext: false,
         seconds: 30,
-      });
+      }));
+      this.ramdomizerAnswers();
     }
     this.timerDidMount();
   }
@@ -121,7 +123,6 @@ class Game extends Component {
       seconds,
       disableButton,
       btnNext,
-      plusplus,
       wasItAnswered,
       randomizeAnswersState,
     } = this.state;
@@ -139,9 +140,9 @@ class Game extends Component {
         <main>
           <section>
             <div>
-              <span data-testid="question-category">{ results[plusplus].category }</span>
+              <span data-testid="question-category">{ query.category }</span>
               <hr />
-              <span data-testid="question-text">{ results[plusplus].question }</span>
+              <span data-testid="question-text">{ query.question }</span>
               <hr />
             </div>
           </section>
