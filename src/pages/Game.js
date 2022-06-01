@@ -4,6 +4,8 @@ import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
 import Header from '../components/Header';
 import { fetchAPI } from '../redux/actions/gameStart';
+import CorrectButton from '../components/ButtomCorrect';
+import IncorrectButton from '../components/ButtonIncorrect';
 import '../styles/gameStyles.css';
 
 class Game extends Component {
@@ -19,7 +21,7 @@ class Game extends Component {
       btnNext: false,
       plusplus: 0,
       randomizeAnswersState: [], // estado das respostas
-      classes: 'btn btn-primary',
+      wasItAnswered: false,
     };
   }
 
@@ -106,55 +108,12 @@ class Game extends Component {
   //   }
   // }
 
-  youAnsweredCorrectly = () => {
-    console.log('Correto chamado!');
+  youAnswered = () => {
     this.setState({
-      classes: 'btn button-success',
-    }, () => {
-      console.log('Set State Chamado para sucesso!');
+      wasItAnswered: true,
     });
   }
 
-  youAnsweredWrong = () => {
-    console.log('Errado chamado!');
-    this.setState({
-      classes: 'btn button-danger',
-    }, () => {
-      console.log('Set State Chamado para errado!');
-    });
-  }
-
-  // classes padrão: 'btn btn-primary' sucesso: 'button-success' erro: 'button-danger'
-  classDecider = (classes, answers, query, index) => {
-    console.log('Classe atual no state:', classes);
-    console.log('Qual a resposta clicada?', answers);
-    console.log('Qual pergunta certa?', query.correct_answer);
-    // console.log('Em que pé estamos no index?', index);
-    // console.log('Qual pergunta errada?', query.incorrect_answers[index - 1]);
-    if (classes === 'btn button-success'
-    && answers === query.correct_answer) {
-      console.log('Estou retornando Verdade');
-      return 'button-success';
-    }
-    if (classes === 'btn button-danger'
-    && answers === query.incorrect_answers[index - 1]) {
-      console.log('Estou retornando Erro');
-      return 'button-danger';
-    }
-    console.log('Estou retornando Primário');
-    return 'btn btn-primary';
-  }
-
-  // O que está acontecendo?
-  // a função classDecider está retornando apenas 'btn btn-primary' mesmo quando a entrada no parâmetro classes é 'button-success'.
-  // Por algum motivo os parâmetros answer e query estão entrando como boleanos sendo que são strings.
-  // isso não cauda nenhum problema já que if true === true ou if true === false também funciona.
-  // query.correct_answer sempre tem o valor booleano true não sei pq...
-  // answers muda de valor booleano toda hora
-  // onClick e as funções youAnsweredCorrectly e youAnsweredWrong estão funcionando corretamente sempre.
-  // já verifiquei o state e o redux. Tudo correto. O erro está na classDecider.
-
-  // Alguem precisa olhar se as classes CSS estão certas no arquivo ou se há algum erro CSS.
   render() {
     const {
       redirect,
@@ -163,7 +122,7 @@ class Game extends Component {
       disableButton,
       btnNext,
       plusplus,
-      classes,
+      wasItAnswered,
       randomizeAnswersState,
     } = this.state;
     const { toAsk } = this.props;
@@ -188,29 +147,26 @@ class Game extends Component {
           </section>
           <section>
             {randomizeAnswersState
-              .map((answers, index) => (
-                <button
-                  key={ index }
-                  disabled={ disableButton }
-                  type="button"
-                  className={ this.classDecider(classes, answers, query, index) }
-                  // className={ classes }
-                  data-testid={
-                    answers === query.correct_answer
-                      ? 'correct-answer'
-                      : `wrong-answer-${index}`
-                  }
-                  onClick={ () => {
-                    if (answers === query.correct_answer) {
-                      return this.youAnsweredCorrectly();
-                    }
-                    this.youAnsweredWrong();
-                  } }
-                >
-                  { answers }
-
-                </button>
-              ))}
+              .map((answers, index) => {
+                if (answers === query.correct_answer) {
+                  return (
+                    <CorrectButton
+                      key={ index }
+                      disableButton={ disableButton }
+                      wasItAnswered={ wasItAnswered }
+                      answers={ answers }
+                      youAnswered={ this.youAnswered() }
+                    />);
+                }
+                return (
+                  <IncorrectButton
+                    key={ index }
+                    disableButton={ disableButton }
+                    wasItAnswered={ wasItAnswered }
+                    answers={ answers }
+                    youAnswered={ this.youAnswered() }
+                  />);
+              })}
 
             <h1>
               {`Tempo: ${seconds}`}
