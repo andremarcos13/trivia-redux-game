@@ -114,6 +114,7 @@ class Game extends Component {
     this.setState({
       wasItAnswered: true,
     });
+    clearInterval(this.timer); // stop the timer
   }
 
   render() {
