@@ -1,7 +1,14 @@
 export const QUESTION_SAVER = 'QUESTION_SAVER';
+export const SAVE_SCORE = 'SAVE_SCORE';
 export const questionsSaver = (payload) => ({
   type: QUESTION_SAVER,
   payload,
+});
+
+export const saveStats = (playerScore, assertions) => ({
+  type: SAVE_SCORE,
+  playerScore,
+  assertions,
 });
 
 export const fetchAPI = (token) => async (dispatch) => {

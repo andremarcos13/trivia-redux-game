@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
 import Header from '../components/Header';
-import { fetchAPI } from '../redux/actions/gameStart';
+import { fetchAPI, saveStats } from '../redux/actions/gameStart';
 import CorrectButton from '../components/ButtomCorrect';
 import IncorrectButton from '../components/ButtonIncorrect';
 import '../styles/gameStyles.css';
@@ -40,7 +40,7 @@ class Game extends Component {
 
   timerDidMount = () => {
     const ONE_MILISEC = 1000; // 1 second = 1000 milliseconds.
-    this.timer = setInterval(this.timerToAnswer, ONE_MILISEC); // The setInterval() method calls a function at specified intervals (in milliseconds).
+    this.timer = setInterval(this.timerToAnswer, ONE_MILISEC);// The setInterval() method calls a function at specified intervals (in milliseconds).
   }
 
   ramdomizerAnswers = (questionsCount) => {
@@ -80,6 +80,7 @@ class Game extends Component {
         btnNext: false,
         seconds: 30,
         wasItAnswered: false,
+        assertions: 0,
       }));
     }
     this.ramdomizerAnswers(questionsCount + 1);
@@ -105,16 +106,42 @@ class Game extends Component {
       });
     } else {
       clearInterval(this.timer); // The setInterval() method continues calling the function until clearInterval() is called, or the window is closed.
-      this.setState({ disableButton: true, questionTimer: false, btnNext: true });
+      this.setState(
+        { disableButton: true, questionTimer: false, btnNext: true, wasItAnswered: true },
+      );
     }
   }
 
-  youAnswered = () => {
-    this.setState({
+  youAnswered = ({ target }) => {
+    const { toAsk, dispatch } = this.props;
+    const { questions } = toAsk;
+    const { results } = questions;
+    const { questionsCount } = this.state;
+    const query = results[questionsCount];
+    this.setState((prev) => ({
       wasItAnswered: true,
       btnNext: true,
-    });
+      assertions: prev.assertions + 1,
+    }));
     clearInterval(this.timer); // stop the timer
+    if (target.name === 'Correct') {
+      const TEN = 10;
+      const ONE = 1;
+      const TWO = 2;
+      const THREE = 3;
+      const { assertions, seconds } = this.state;
+      const { difficulty } = query;
+      if (difficulty === 'easy') {
+        const score = TEN + (seconds * ONE);
+        dispatch(saveStats(score, assertions));
+      } if (difficulty === 'medium') {
+        const score = TEN + (seconds * TWO);
+        dispatch(saveStats(score, assertions));
+      } else {
+        const score = TEN + (seconds * THREE);
+        dispatch(saveStats(score, assertions));
+      }
+    }
   }
 
   render() {

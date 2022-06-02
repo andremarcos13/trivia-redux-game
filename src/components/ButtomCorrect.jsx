@@ -13,7 +13,8 @@ export default class CorrectButton extends Component {
     } = this.props;
     return (
       <button
-        index={ index }
+        name="Correct"
+        id={ index }
         disabled={ disableButton }
         type="button"
         className={ wasItAnswered ? 'button-success' : 'btn btn-primary' }
