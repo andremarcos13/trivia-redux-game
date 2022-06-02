@@ -11,7 +11,6 @@ import '../styles/gameStyles.css';
 class Game extends Component {
   constructor() {
     super();
-
     this.state = {
       redirect: false,
       questionsCount: 0,
@@ -29,7 +28,7 @@ class Game extends Component {
     const { questionTimer } = this.state;
     const chave = localStorage.getItem('token');
     await dispatch(fetchAPI(chave));
-    this.ramdomizerAnswers(); // chama funcao para randomizar
+    this.ramdomizerAnswers(0); // chama funcao para randomizar
     if (questionTimer === true) {
       this.timerDidMount();
     }
@@ -44,8 +43,7 @@ class Game extends Component {
     this.timer = setInterval(this.timerToAnswer, ONE_MILISEC); // The setInterval() method calls a function at specified intervals (in milliseconds).
   }
 
-  ramdomizerAnswers = () => {
-    const { questionsCount } = this.state;
+  ramdomizerAnswers = (questionsCount) => {
     const { toAsk } = this.props;
     const { questions } = toAsk;
     const { results } = questions;
@@ -60,7 +58,6 @@ class Game extends Component {
     );
     this.setState({
       randomizeAnswersState: ramdomAnswers,
-      questionsCount: questionsCount + 1, // salva resposta em um estado
     });
   }
 
@@ -68,6 +65,7 @@ class Game extends Component {
     const { questionsCount } = this.state;
     const { history } = this.props;
     const maxQuestions = 4; // chama funcao ao clicar no botao next
+
     if (questionsCount === maxQuestions) {
       this.setState({
         questionsCount: 4,
@@ -76,14 +74,15 @@ class Game extends Component {
       history.push('/feedback'); // vai pra pagina de feedback
     } else {
       this.setState(() => ({
-        // questionsCount: questionsCount + 1,
+        questionsCount: questionsCount + 1,
         disableButton: false,
         questionTimer: true,
         btnNext: false,
         seconds: 30,
+        wasItAnswered: false,
       }));
-      this.ramdomizerAnswers();
     }
+    this.ramdomizerAnswers(questionsCount + 1);
     this.timerDidMount();
   }
 
@@ -113,7 +112,9 @@ class Game extends Component {
   youAnswered = () => {
     this.setState({
       wasItAnswered: true,
+      btnNext: true,
     });
+    clearInterval(this.timer); // stop the timer
   }
 
   render() {
