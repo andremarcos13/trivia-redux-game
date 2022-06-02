@@ -11,11 +11,10 @@ import '../styles/gameStyles.css';
 class Game extends Component {
   constructor() {
     super();
-
     this.state = {
       redirect: false,
       questionsCount: 0,
-      seconds: 5, // acrescenta estado com o valor 30
+      seconds: 30, // acrescenta estado com o valor 30
       disableButton: false, // adiciona estado para controlar botoes de resposta
       questionTimer: true,
       btnNext: false,
@@ -79,7 +78,7 @@ class Game extends Component {
         disableButton: false,
         questionTimer: true,
         btnNext: false,
-        seconds: 5,
+        seconds: 30,
         wasItAnswered: false,
       }));
     }
@@ -113,6 +112,7 @@ class Game extends Component {
   youAnswered = () => {
     this.setState({
       wasItAnswered: true,
+      btnNext: true,
     });
     clearInterval(this.timer); // stop the timer
   }
