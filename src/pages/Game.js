@@ -20,6 +20,7 @@ class Game extends Component {
       btnNext: false,
       randomizeAnswersState: [], // estado das respostas
       wasItAnswered: false,
+      assertions: 0,
     };
   }
 
@@ -130,16 +131,18 @@ class Game extends Component {
       const TWO = 2;
       const THREE = 3;
       const { assertions, seconds } = this.state;
+      const newAssertions = assertions + ONE;
+      this.setState({ assertions: newAssertions });
       const { difficulty } = query;
       if (difficulty === 'easy') {
         const score = TEN + (seconds * ONE);
-        dispatch(saveStats(score, assertions));
-      } if (difficulty === 'medium') {
+        dispatch(saveStats(score, newAssertions));
+      } else if (difficulty === 'medium') {
         const score = TEN + (seconds * TWO);
-        dispatch(saveStats(score, assertions));
+        dispatch(saveStats(score, newAssertions));
       } else {
         const score = TEN + (seconds * THREE);
-        dispatch(saveStats(score, assertions));
+        dispatch(saveStats(score, newAssertions));
       }
     }
   }
