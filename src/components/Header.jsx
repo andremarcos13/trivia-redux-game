@@ -21,7 +21,7 @@ class Header extends Component {
         </span>
         <hr />
         <span>Score: </span>
-        <span id="score" data-testid="header-score">{scoreBoard}</span>
+        <span id="score" data-testid="header-score">{`${scoreBoard}`}</span>
         <hr />
       </header>
     );
