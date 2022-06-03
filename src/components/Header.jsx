@@ -1,7 +1,10 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 
 class Header extends Component {
   render() {
+    const { scoreBoard } = this.props;
     const gravatar = localStorage.getItem('ranking');
     const pegandoObj = JSON.parse(gravatar);
     return (
@@ -18,11 +21,19 @@ class Header extends Component {
         </span>
         <hr />
         <span>Score: </span>
-        <span id="score" data-testid="header-score">0</span>
+        <span id="score" data-testid="header-score">{scoreBoard}</span>
         <hr />
       </header>
     );
   }
 }
 
-export default Header;
+Header.propTypes = {
+  scoreBoard: PropTypes.number.isRequired,
+};
+
+const mapStateToProps = (state) => ({
+  scoreBoard: state.player.score,
+});
+
+export default connect(mapStateToProps, null)(Header);
