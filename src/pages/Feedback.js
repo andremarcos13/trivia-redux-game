@@ -7,8 +7,6 @@ class Feedback extends Component {
     const numeroDeRespostas = 3;
     const getLocalStorage = JSON.parse(localStorage.getItem('ranking'));
     const { login, score, assertions, history } = this.props;
-    console.log('score props', score);
-    console.log('assertions props', assertions);
 
     return (
       <header>
