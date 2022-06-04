@@ -10,7 +10,7 @@ class Header extends Component {
     return (
       <header>
         <img
-          src={ `${pegandoObj.picture}` }
+          src={ `${pegandoObj.playerPhoto}` }
           alt="profile"
           data-testid="header-profile-picture"
         />

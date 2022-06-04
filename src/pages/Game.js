@@ -64,7 +64,6 @@ class Game extends Component {
 
     if (questionsCount === maxQuestions) {
       this.setState({ questionsCount: 4, btnNext: false }); // se o estado do plusplus estiver no fim do array
-      console.log('fim das perguntas!!');
       history.push('/feedback'); // vai pra pagina de feedback
     } else {
       this.setState(() => ({
@@ -83,7 +82,6 @@ class Game extends Component {
 
   redirectIfInvalidToken = () => {
     const { tokenResponse } = this.props;
-    console.log('tolen respone', tokenResponse);
     const responseCode = tokenResponse.response_code;
     if (responseCode !== 0) {
       localStorage.removeItem('token');

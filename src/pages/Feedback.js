@@ -5,26 +5,24 @@ import { connect } from 'react-redux';
 class Feedback extends Component {
   render() {
     const numeroDeRespostas = 3;
+    const getLocalStorage = JSON.parse(localStorage.getItem('ranking'));
     const { login, score, assertions, history } = this.props;
-    console.log('login', login);
-    console.log('score', score);
-    console.log('assertions', assertions);
 
     return (
       <header>
         <div>
           <img
-            src={ login }
+            src={ getLocalStorage.playerPhoto }
             data-testid="header-profile-picture"
             alt="gravatar profile"
           />
-          <p data-testid="header-player-name">{ login }</p>
+          <p data-testid="header-player-name">{login }</p>
           <p id="score" data-testid="header-score">{ score }</p>
         </div>
 
         <section>
           {
-            assertions <= numeroDeRespostas ? (
+            assertions < numeroDeRespostas ? (
               <h1 data-testid="feedback-text">Could be better...</h1>
             ) : (
               <h1 data-testid="feedback-text">Well Done!</h1>
@@ -72,8 +70,8 @@ Feedback.propTypes = {
 }.isRequired;
 
 const mapStateToProps = (state) => ({
-  login: state.login,
-  score: state.score,
-  assertions: state.assertions,
+  login: state.player.name,
+  assertions: state.player.assertions,
+  score: state.player.score,
 });
 export default connect(mapStateToProps, null)(Feedback);

@@ -23,7 +23,7 @@ const player = (state = State, {
     return {
       ...state,
       score: state.score + playerScore,
-      assertions,
+      assertions: state.assertions + assertions,
     };
 
   default:
