@@ -50,28 +50,21 @@ class Game extends Component {
     const { results } = questions;
     const question = results[questionsCount]; // <<<< ERRO
     const ZERO_DOT_FIVE = 0.5;
-    const toRandomizeAnswers = [
-      ...question.incorrect_answers,
-      question.correct_answer,
-    ];
+    const toRandomizeAnswers = [...question.incorrect_answers, question.correct_answer];
     const ramdomAnswers = toRandomizeAnswers.sort(
       () => Math.random() - ZERO_DOT_FIVE,
     );
-    this.setState({
-      randomizeAnswersState: ramdomAnswers,
-    });
+    this.setState({ randomizeAnswersState: ramdomAnswers });
   }
 
-  btnNextIplusplus = () => {
+  handleButtonNext = () => {
     const { questionsCount } = this.state;
     const { history } = this.props;
     const maxQuestions = 4; // chama funcao ao clicar no botao next
 
     if (questionsCount === maxQuestions) {
-      this.setState({
-        questionsCount: 4,
-        btnNext: false,
-      }); // se o estado do plusplus estiver no fim do array
+      this.setState({ questionsCount: 4, btnNext: false }); // se o estado do plusplus estiver no fim do array
+      console.log('fim das perguntas!!');
       history.push('/feedback'); // vai pra pagina de feedback
     } else {
       this.setState(() => ({
@@ -83,19 +76,19 @@ class Game extends Component {
         wasItAnswered: false,
         assertions: 0,
       }));
+      this.ramdomizerAnswers(questionsCount + 1);
+      this.timerDidMount();
     }
-    this.ramdomizerAnswers(questionsCount + 1);
-    this.timerDidMount();
   }
 
   redirectIfInvalidToken = () => {
     const { tokenResponse } = this.props;
+    console.log('tolen respone', tokenResponse);
     const responseCode = tokenResponse.response_code;
     if (responseCode !== 0) {
       localStorage.removeItem('token');
       this.setState({
-        redirect: true,
-      });
+        redirect: true });
     }
   }
 
@@ -120,9 +113,7 @@ class Game extends Component {
     const { questionsCount } = this.state;
     const query = results[questionsCount];
     this.setState((prev) => ({
-      wasItAnswered: true,
-      btnNext: true,
-      assertions: prev.assertions + 1,
+      wasItAnswered: true, btnNext: true, assertions: prev.assertions + 1,
     }));
     clearInterval(this.timer); // stop the timer
     if (target.name === 'Correct') {
@@ -201,7 +192,6 @@ class Game extends Component {
                     youAnswered={ this.youAnswered }
                   />);
               })}
-
             <h1>
               {`Tempo: ${seconds}`}
             </h1>
@@ -211,13 +201,12 @@ class Game extends Component {
                 <button
                   type="submit"
                   data-testid="btn-next"
-                  onClick={ this.btnNextIplusplus }
+                  onClick={ this.handleButtonNext }
                 >
                   Next
                 </button>
               )
             }
-
           </section>
         </main>
       </>
