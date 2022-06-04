@@ -40,7 +40,7 @@ class Login extends Component {
     const { email, playerName } = this.state;
     const hash = md5(email).toString();
     const url = `https://www.gravatar.com/avatar/${hash}`;
-    const obj = { name: playerName, score: 0, picture: url };
+    const obj = { name: playerName, score: 0, playerPhoto: url };
     localStorage.setItem('ranking', JSON.stringify(obj));
     dispatch(gravatarAct(playerName, email));
   }
