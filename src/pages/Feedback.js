@@ -1,25 +1,16 @@
 import React, { Component } from 'react';
 import Proptypes from 'prop-types';
 import { connect } from 'react-redux';
+import Header from '../components/Header';
 
 class Feedback extends Component {
   render() {
     const numeroDeRespostas = 3;
-    const getLocalStorage = JSON.parse(localStorage.getItem('ranking'));
-    const { login, score, assertions, history } = this.props;
+    const { score, assertions, history } = this.props;
 
     return (
       <header>
-        <div>
-          <img
-            src={ getLocalStorage.playerPhoto }
-            data-testid="header-profile-picture"
-            alt="gravatar profile"
-          />
-          <p data-testid="header-player-name">{login }</p>
-          <p id="score" data-testid="header-score">{ score }</p>
-        </div>
-
+        <Header />
         <section>
           {
             assertions < numeroDeRespostas ? (

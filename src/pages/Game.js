@@ -35,10 +35,6 @@ class Game extends Component {
     }
   }
 
-  componentDidUpdate() {
-    this.redirectIfInvalidToken();
-  }
-
   timerDidMount = () => {
     const ONE_MILISEC = 1000; // 1 second = 1000 milliseconds.
     this.timer = setInterval(this.timerToAnswer, ONE_MILISEC);// The setInterval() method calls a function at specified intervals (in milliseconds).
@@ -48,6 +44,12 @@ class Game extends Component {
     const { toAsk } = this.props;
     const { questions } = toAsk;
     const { results } = questions;
+    const magicNumber = 3;
+    if (questions.response_code === magicNumber) {
+      localStorage.removeItem('token');
+      console.log('pegando validacao 3');
+      return;
+    }
     const question = results[questionsCount]; // <<<< ERRO
     const ZERO_DOT_FIVE = 0.5;
     const toRandomizeAnswers = [...question.incorrect_answers, question.correct_answer];
@@ -64,6 +66,7 @@ class Game extends Component {
 
     if (questionsCount === maxQuestions) {
       this.setState({ questionsCount: 4, btnNext: false }); // se o estado do plusplus estiver no fim do array
+      // const sendToLocalStorage = localStorage.setItem('jcRanking', );
       history.push('/feedback'); // vai pra pagina de feedback
     } else {
       this.setState(() => ({
@@ -146,12 +149,17 @@ class Game extends Component {
       wasItAnswered,
       randomizeAnswersState,
     } = this.state;
-    const { toAsk } = this.props;
+    const { toAsk, history } = this.props;
     const { questions } = toAsk;
     const { results } = questions;
     if (typeof results === 'undefined') {
       return 'Loading';
     } // NÃO REMOVA ESSA PORRA... NUNCA!
+    const magicNumber = 3;
+    if (toAsk.questions.response_code === magicNumber) {
+      history.push('/');
+      return;
+    }
     const query = results[questionsCount];
     return (
       <>
@@ -167,11 +175,22 @@ class Game extends Component {
             </div>
           </section>
           <section>
-            {randomizeAnswersState
-              .map((answers, index) => {
-                if (answers === query.correct_answer) {
+            <div data-testid="answer-options">
+              {randomizeAnswersState
+                .map((answers, index) => {
+                  if (answers === query.correct_answer) {
+                    return (
+                      <CorrectButton
+                        key={ index }
+                        index={ index }
+                        disableButton={ disableButton }
+                        wasItAnswered={ wasItAnswered }
+                        answers={ answers }
+                        youAnswered={ this.youAnswered }
+                      />);
+                  }
                   return (
-                    <CorrectButton
+                    <IncorrectButton
                       key={ index }
                       index={ index }
                       disableButton={ disableButton }
@@ -179,17 +198,8 @@ class Game extends Component {
                       answers={ answers }
                       youAnswered={ this.youAnswered }
                     />);
-                }
-                return (
-                  <IncorrectButton
-                    key={ index }
-                    index={ index }
-                    disableButton={ disableButton }
-                    wasItAnswered={ wasItAnswered }
-                    answers={ answers }
-                    youAnswered={ this.youAnswered }
-                  />);
-              })}
+                })}
+            </div>
             <h1>
               {`Tempo: ${seconds}`}
             </h1>
