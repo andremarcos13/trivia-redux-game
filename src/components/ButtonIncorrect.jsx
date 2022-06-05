@@ -12,6 +12,7 @@ export default class IncorrectButton extends Component {
       youAnswered,
     } = this.props;
     return (
+      // <div data-testid="answer-options">
       <button
         name="inCorrect"
         id={ index }
@@ -24,6 +25,7 @@ export default class IncorrectButton extends Component {
         { answers }
 
       </button>
+      // </div>
     );
   }
 }
