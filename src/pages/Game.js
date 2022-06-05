@@ -158,7 +158,7 @@ class Game extends Component {
     const magicNumber = 3;
     if (toAsk.questions.response_code === magicNumber) {
       history.push('/');
-      return;
+      return 'teste';
     }
     const query = results[questionsCount];
     return (
