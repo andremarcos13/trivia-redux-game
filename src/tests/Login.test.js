@@ -1,5 +1,5 @@
 import React from 'react';
-import { screen } from '@testing-library/react';
+import { screen, waitFor  } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import renderWithRouterAndRedux from './helpers/renderWithRouterAndRedux';
 import App from '../App';
@@ -16,8 +16,7 @@ describe('Requisito 1 ao 3', () => {
       expect(title).toBeInTheDocument();
       expect(title).toHaveTextContent('Trivia');
   });
-  it(`Testa se há um input de email e nome
-  E se o botão está habilitado ou desabilitado de acordo com o teste`, () => {
+  it(`Testa se há um input de email e nome`, () => {
     //renderize sempre
     const { history } = renderWithRouterAndRedux(<App />);
     // Acesse
@@ -25,7 +24,6 @@ describe('Requisito 1 ao 3', () => {
     const playButton = screen.getByRole('button', {  name: /play/i});
     // Interaja
     expect(playButton).toBeInTheDocument();
-    expect(playButton).toBeDisabled();
     userEvent.type(allInput[0], 'trybe@trybe.com');
     userEvent.type(allInput[1], 'trybe');
     // Teste
@@ -33,11 +31,10 @@ describe('Requisito 1 ao 3', () => {
     expect(allInput[0]).toHaveValue('trybe@trybe.com');
     expect(allInput[1]).toBeInTheDocument();
     expect(allInput[1]).toHaveValue('trybe');
-    expect(playButton).toBeEnabled();
 
-    userEvent.click(playButton);
-    const { location: { pathname } } = history;
-    expect(pathname).toBe('/game');
+    // userEvent.click(playButton);
+    // const { location: { pathname } } = history;
+    // expect(pathname).toBe('/game');
   });
   it('Testa o botão settings leva para a rota certa', () => {
     const { history } = renderWithRouterAndRedux(<App />);
@@ -51,7 +48,29 @@ describe('Requisito 1 ao 3', () => {
     const title = screen.getByRole('heading', {  name: /settings/i, level: 1})
     expect(title).toBeInTheDocument();
   });
-  
+  it('testa o token valido leva a pagina game', async () => {
+    const api = [{ 
+        response_code:0,
+        response_message:"Token Generated Successfully!",
+        token:"a11784453a517db0d1fad8b4839b66e2ff2ba57742b469cea90cf0c674aad118" 
+    }];
+    global.fetch = jest.fn(() => Promise.resolve({
+        json: () => Promise.resolve(api),
+      }));
+      const { history } = renderWithRouterAndRedux(<App />);
+      const btnPlay = screen.getByRole('button', {name: /Play/i});
+        const inputName = screen.getByPlaceholderText('Ada Lovelance');
+        const inputEmail = screen.getByPlaceholderText('ada@lovelance.com');
+        expect(btnPlay).toBeDisabled();
+        userEvent.type(inputName, 'asdasda');
+        userEvent.type(inputEmail, 'asda@qewqda.com');
+        expect(btnPlay).toBeEnabled();      
+        userEvent.click(btnPlay);
+        await waitFor(() => {
+            const { pathname } = history.location;
+            expect(pathname).toBe('/game')
+        });       
+  })
 })
 
 //renderize sempre

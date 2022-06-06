@@ -18,7 +18,7 @@ describe('Testa pagina feedback', () => {
         const { history } = renderWithRouterAndRedux(<App />, player2corrects, '/feedback');
         expect(screen.getByTestId("btn-ranking")).toBeInTheDocument();
         userEvent.click(screen.getByTestId("btn-ranking"));
-        expect(history.location.pathname).toBe('/ranking')
+        expect(history.location.pathname).toBe('/Ranking')
     })
       it('testa se a msg "Could be Better..." aparece ', () => {
         localStorage.setItem('ranking', JSON.stringify(mockDoLocalStorage));
